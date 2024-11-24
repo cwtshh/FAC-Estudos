@@ -1,0 +1,41 @@
+.data
+    dig_num:    .asciiz "\nDigite um numero\n" 
+    dig_2num:   .asciiz "\Digite outro numero\n"
+
+main:
+    # printar primeira linha
+    li $v0, 4
+    la $a0, dig_num
+    syscall
+
+    # pega o valor digitado pelo usuario
+    li $v0, 5
+    syscall
+    move $t0, $v0
+
+    # printa segunda linha
+    li $v0, 4
+    la $a0, dig_2num
+    syscall
+
+    # pega o valor do seg numero
+    li $v0, 5
+    syscall
+    move $t1, $v0
+
+    # soma as variaveis
+    add $s0, $t0, t1
+
+    li $v0, 1
+    la $a0, $s0
+    syscall
+
+    li $v0, 10
+    syscall
+
+
+
+
+    
+
+    

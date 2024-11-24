@@ -1,0 +1,29 @@
+.data
+
+.text
+
+main:
+
+    # le o primeiro inteiro
+    li $v0, 5
+    syscall
+
+    move $t0, $v0
+
+    # le o segundo inteiro
+    li $v0, 5
+    syscall
+
+    # calcula a diferenca 
+    sub $a0, $t0, $v0
+
+    # imprime o valor
+    li $v0, 1
+    syscall
+
+    # encerra o programa
+    li $v0, 10
+    syscall
+
+
+

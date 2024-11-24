@@ -1,0 +1,35 @@
+.data
+    frase1: .asciiz "Dite o primeiro número:\n"
+    frase2: .asciiz "Digite o segundo número\n"
+    frase3: .asciiz "O resultado da soma é:\n"
+
+.text
+
+main:
+    li $v0, 4
+    la $a0, frase1
+    syscall
+
+    li $v0, 5
+    syscall
+    move $s0, $v0
+
+    li $v0, 4
+    la $a0, frase2
+    syscall
+
+    li $v0, 5
+    syscall
+    
+    add $s1, $v0, $s0
+
+    li $v0, 4
+    la $a0, frase3
+    syscall
+
+    li $v0, 1
+    move $a0, $s1
+    syscall
+
+    li $v0, 10
+    syscall

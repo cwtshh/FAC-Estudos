@@ -1,0 +1,18 @@
+.data
+    verdade:  .asciiz "Verdadeiro\n"
+.text
+
+main:
+    li $t0, 1
+    li $t1, 1
+    beq $t0, $t1, imprimev
+    j encerrar
+
+imprimev:
+    li $v0, 4
+    la $a0, verdade
+    syscall
+
+encerrar:
+    li $v0, 10
+    syscall
