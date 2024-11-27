@@ -1,0 +1,51 @@
+.data
+    input: .space 10
+    quebra: .asciiz "\n"
+.text
+
+main:
+    li $v0, 5
+    syscall
+
+    move $t0, $v0
+    move $t7, $v0
+
+lernum:
+    beq $t0, $zero, encerrar
+    addi $t0, -1
+
+    li $v0, 8
+    la $a0, input
+    syscall
+
+    lb $t1, 0($a0)
+    lb $t2, 2($a0)
+
+    beq $t1, $t2, igual
+
+    li $a0, 2
+    li $v0, 1
+    syscall
+
+    la $a0, quebra
+    li $v0, 4
+    syscall
+
+    j lernum
+
+igual:
+    li $a0, 1
+    la $v0, 1
+    syscall
+    
+    la $a0, quebra
+    li $v0, 4
+    syscall
+
+    j lernum
+
+
+encerrar:
+    li $v0, 10
+    syscall
+
