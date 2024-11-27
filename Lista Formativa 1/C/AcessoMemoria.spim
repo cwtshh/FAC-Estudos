@@ -1,0 +1,48 @@
+.data
+    A: .word 10, 20, 30, 40, 50, 60, 70, 80, 90, 100
+    tamanho_array: .word 10     
+.text
+
+main:
+
+la $s0, A
+
+# s0 - array
+# s1 - I
+# s2 - J
+# s3 - N
+
+li $v0, 5
+syscall
+move $s1, $v0
+
+
+li $v0, 5
+syscall
+move $s2, $v0
+
+
+li $v0, 5
+syscall
+move $s3, $v0
+
+# AJ
+sll $t0, $s2, 2
+add $t0, $t0, $s0
+lw $t1, 0($t0)
+
+# soma com N
+add $t2, $t1, $s3
+
+sll $t3, $s1, 2
+add $t3, $t3, $s0
+sw $t2, 0($t3)
+
+li $v0, 10
+syscall
+
+
+
+
+
+
