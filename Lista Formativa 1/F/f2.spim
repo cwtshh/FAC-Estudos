@@ -1,0 +1,82 @@
+.data
+    vector: .word 1, 1, 2, 2, 5, 5, 5, 7, 8
+    size: .word 9
+
+    str: .asciiz " "
+    ln: .asciiz "\n"
+
+.text
+
+main:
+
+    la $a0, vector
+    la $a1,9
+
+    jal elemDistintos
+
+    move $a0, $v0
+    li $v0, 1
+    syscall
+
+
+    li $v0, 10
+    syscall
+
+elemDistintos:
+    move $t0, $a0
+    move $t1, $a1
+
+    li $t2, 0 # contador
+    li $v0, 0
+
+    loop:
+
+        beq $t1, $zero, encerrar
+
+        lw $s0, 0($t0)
+
+        move $a0, $s0
+        li $v0, 1
+        syscall
+
+        addi $t3, $t0, 4
+        lw $s1, 0($t3)
+
+        move $a0, $s1
+        li $v0, 1
+        syscall
+
+        la $a0, str
+        li $v0, 4
+        syscall
+        
+        addi $t0, $t0, 4
+
+        beq $s0, $s1, n_incrementa
+
+
+        
+        addi $t2, $t2, 1
+        addi $t1, $t1, -1
+
+        j loop
+
+
+
+    n_incrementa:
+        addi $t1, $t1, -1
+        j loop
+
+
+encerrar:
+
+    la $a0,ln
+    li $v0, 4
+    syscall
+
+    la $a0, ln
+    li $v0, 4
+    syscall
+
+    move $v0, $t2
+    jr $ra

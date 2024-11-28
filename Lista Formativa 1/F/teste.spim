@@ -1,0 +1,17 @@
+.data
+
+    quebra: .asciiz "\n"
+.text
+
+main:
+    move $a0, $t0
+
+    li $v0, 1
+    syscall
+
+    la $a0, quebra
+    li $v0, 4
+    syscall
+
+    li $v0, 10
+    syscall
