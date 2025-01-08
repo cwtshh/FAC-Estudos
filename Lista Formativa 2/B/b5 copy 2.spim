@@ -1,0 +1,85 @@
+verifica_sinal:
+    xor $s3, $s7, $s6
+    slt $s3, $t3, $zero 
+    
+    bne $s3, $zero, inverte
+
+    jr $ra
+
+inverte:
+    sub $t0, $zero, $t0
+
+    jr $ra
+
+encerrar:
+
+    jal verifica_sinal
+
+    li $v0, 10
+    syscall
+
+deixa_pos:
+
+
+
+
+multifac:
+    li $t0, 0 # HI
+    li $t1, 0 # lo
+
+    li $t7, 0 # contador
+    li $t6, 32 # limite
+
+    move $s7, $a0 # copia M para s7
+    move $s6, $a1
+
+    move $t1, $a1 # copia Q para LO
+
+    jal verifica_sinal
+
+    bne $s3, $zero, deixa_pos
+
+    j mult_loop
+
+mult_loop:
+    # se contador chegar em 32 encerra
+    beq $t7, $t6, encerrar 
+    # adiciona no contador
+    addi $t7, $t7, 1
+
+    # pega o bit menos significativo de LO
+    andi $t3, $t1, 1
+    bne $t3, $zero, incrementar
+
+    
+    andi $t3, $t0, 1
+    srl $t0, $t0, 1
+    
+    sll $t3, $t3, 31
+
+    srl $t1, $t1, 1
+    or $t1, $t1, $t3
+
+
+    j mult_loop 
+
+incrementar:
+    addu $t0, $t0, $s7
+    andi $t3, $t0, 1
+    srl $t0, $t0, 1
+    sll $t3, $t3, 31
+    srl $t1, $t1, 1
+    or $t1, $t1, $t3
+    j mult_loop
+
+   
+
+
+
+
+
+
+
+
+
+

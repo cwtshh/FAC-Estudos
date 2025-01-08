@@ -1,0 +1,73 @@
+.data
+    over_str: .asciiz "overflow\n"
+
+.text
+
+main:
+    li $v0, 5
+    syscall
+
+    move $s0, $v0
+
+    li $v0, 5
+    syscall
+
+    move $s1, $v0
+
+    li $v0, 5
+    syscall
+
+    move $s2, $v0
+
+    bne $s0, $zero, com_sinal
+
+    j sem_sinal
+
+
+sem_sinal:
+    addu $t0, $s1, $s2
+    
+    # negativa $s1
+    nor $t1, $s1, $zero
+    sltu $t1, $t1, $s2
+    bne $t1, $zero, overflow
+
+    move $a0, $t0
+
+    j sem_overflow
+
+
+com_sinal:
+    addu $a0, $s1, $s2
+
+    # ve se os numeros tem sinais diferentes
+    xor $t0, $s1, $s2
+    # se o msb = 1, tem sinais diferentes
+    slt $t0, $t0, $zero
+    bne $t0, $zero, sem_overflow
+
+    # se o sinal da soma for igual a dos operandos sem_overflow
+    xor $t0, $a0, $s1
+    # se o msb = 1, o tem sinal diferente
+    slt $t0, $t0, $zero
+    bne $t0, $zero, overflow
+
+    j sem_overflow
+
+overflow:
+    la $a0, over_str
+    li $v0, 4
+    syscall
+
+    j encerrar
+
+
+sem_overflow:
+    li $v0, 1
+    syscall 
+
+    j encerrar
+
+encerrar:
+    li $v0, 10
+    syscall

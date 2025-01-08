@@ -1,0 +1,124 @@
+.data
+    str_hi: .asciiz "hi = "
+    str_lo: .asciiz "lo = "
+
+    ln: .asciiz "\n"
+
+.text
+
+
+main:
+
+    li $v0, 5
+    syscall
+
+    move $a0, $v0
+
+    li $v0, 5
+    syscall
+
+    move $a1, $v0
+
+    jal div_fac
+
+
+encerrar:
+
+    srl $t0, $t0, 1
+
+    la $a0, str_hi
+    li $v0, 4
+    syscall
+
+    move $a0, $t0
+    li $v0, 1
+    syscall
+
+    la $a0, ln
+    li $v0, 4
+    syscall
+
+    la $a0, str_lo
+    li $v0, 4
+    syscall
+
+    move $a0, $t1
+    li $v0, 1
+    syscall
+
+    la $a0, ln
+    li $v0, 4
+    syscall
+
+    li $v0, 10
+    syscall
+
+
+div_fac:
+    # HI
+    li $t0, 0
+    # LO
+    li $t1, 0
+
+    li $t7, 1
+    li $t6, 32
+
+    # salvando os valores originais para ver sinal dps
+    move $s0, $a0
+    move $s1, $a1
+
+    # passo 1 - dividendo na parte menos significativa do resto
+    move $t1, $s0
+
+    # TRATAR SINAIS
+
+    # passo 2 - deslocamento de 1 bit em resto
+    # desloca HI
+    sll $t0, $t0, 1
+    # pega o bit mais significativo de LO
+    srl $t2, $t1, 31
+    # adiciona ele a parte menos siginifactiva de HI
+    or $t0, $t0, $t2
+    # desloca LO
+    sll $t1, $t1, 1
+
+    j div_loop
+
+div_loop:
+    # se contador < 32 continua
+    slt $t4, $t7, $t6
+    bne $t4, $zero, encerrar
+    addi $t7, $t7, 1
+
+    # passo 3 - R = R - D
+    sub $t0, $t0, $s1   
+
+    # passo 4 - 
+    #   Se R < 0, resutara o valor
+    #   Se R > 0, desloca e soma 1
+    slt $t2, $t0, $zero
+    bne $t2, $zero, restaura
+
+    # R > 0
+    sll $t0, $t0, 1
+    srl $t2, $t1, 31
+    or $t0, $t0, $t2
+    sll $t1, $t1, 1
+    andi $t1, $t1, 1
+
+    j div_loop
+
+
+restaura:
+    add $t0, $t0, $s1
+
+    # desloca H1
+    sll $t0, $t0, 1 
+
+    # pega o bit mais significativo de LO
+    srl $t2, $t1, 31
+
+    # adiciona a parte menos significativa de HI
+    or $t0, $t0, $t2
+
+    j div_loop
